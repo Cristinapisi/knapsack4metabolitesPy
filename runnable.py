@@ -44,7 +44,6 @@ def run_tests(inputfile, outputfile, function):
     data_in = [(float(datum.split(', ')[0]), (float(datum.split(', ')[1]))/1000000) for datum in data_in.splitlines()]
 
     # print all formulas found for that set
-    print data_in
     f = open(outputfile, 'w')
     f.write("mass".center(15) + "tolerance(ppm)".center(10) + "formula".center(20) + "time elapsed".center(15) + "\n")
     for (mass, tolerance) in data_in:
