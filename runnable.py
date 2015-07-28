@@ -69,7 +69,7 @@ def run_for_frank():
     """
 
 if __name__ == '__main__':
-    run_locally(exhaustive_search, delta)
+    run_locally(knapsack, delta)
     # run_tests('Test_data_in.txt', 'Test_data_out.txt', exhaustive_search, delta)
     # run_tests('Test_data_in.txt', 'Test_data_out2.txt', knapsack, delta)
     # run_for_frank()
