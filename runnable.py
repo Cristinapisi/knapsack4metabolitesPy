@@ -9,13 +9,14 @@ for Glucose
 import datetime
 import exhaustive_search
 import knapsack
+from functions import get_formula_string
+
+# computation error allowed
+delta = 0.00000000001
 
 incorrect_input = "Nope, not what I asked you to enter"
 
-def get_formula_string(formula):
-    return ''.join([element['symbol'] + str(number) for (element, number) in formula if number])
-
-def run_locally():
+def run_locally(function, delta):
     """
     Run from console
     Enter manually: 1 mass and 1 tolerance (in ppm)
@@ -26,7 +27,7 @@ def run_locally():
         mass = float(input("Enter a mass: "))
         tolerance = float(input("Enter a tolerance (in ppm): ")) /1000000
         t1 = datetime.datetime.utcnow()
-        formulas = exhaustive_search.search(mass, tolerance)
+        formulas = function.search(mass, tolerance, delta)
         t2 = datetime.datetime.utcnow()
         for formula in formulas:
             print get_formula_string(formula)
@@ -36,7 +37,14 @@ def run_locally():
     except NameError:
         print incorrect_input
 
-def run_tests(inputfile, outputfile, function):
+def run_tests(inputfile, outputfile, function, delta):
+    """
+
+    :param inputfile: String with the name of the input file
+    :param outputfile: String with the name of the output file
+    :param function: for which script to run search (exhaustive_search or knapsack)
+    :return: list of formulas
+    """
     # read mass and tolerance pairs
     with open(inputfile,'r') as f:
         data_in = f.read()
@@ -48,12 +56,11 @@ def run_tests(inputfile, outputfile, function):
     f.write("mass".center(15) + "tolerance(ppm)".center(10) + "formula".center(20) + "time elapsed".center(15) + "\n")
     for (mass, tolerance) in data_in:
         t1 = datetime.datetime.utcnow()
-
-        # Here you chose which approach to run
-        formulas = function.search(mass, tolerance)
+        formulas = function.search(mass, tolerance, delta)
         t2 = datetime.datetime.utcnow()
         for formula in formulas:
             f.write(str(mass).rjust(15) + str(int(tolerance*1000000)).rjust(10) + get_formula_string(formula).rjust(20) + str(t2-t1).rjust(15) + "\n")
+    f.close()
 
 def run_for_frank():
     """
@@ -62,8 +69,9 @@ def run_for_frank():
     """
 
 if __name__ == '__main__':
-    # run_locally()
-    run_tests('Test_data_in.txt', 'Test_data_out.txt', exhaustive_search)
+    run_locally(exhaustive_search, delta)
+    # run_tests('Test_data_in.txt', 'Test_data_out.txt', exhaustive_search, delta)
+    # run_tests('Test_data_in.txt', 'Test_data_out2.txt', knapsack, delta)
     # run_for_frank()
     print "Done"
 

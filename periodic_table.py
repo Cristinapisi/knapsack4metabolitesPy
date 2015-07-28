@@ -37,9 +37,3 @@ S35 = {'mass': 34.96903214000, 'percent':  0.0000}
 S36 = {'mass': 35.96708088000, 'percent':  0.0200}
 SULFUR ={'name': "sulfur", 'symbol': "S", 'mass': 32.06533000000, 'freqisotope': S32, 'isotopes':[S32, S33, S34, S35, S36]}
 elements.append(SULFUR)
-
-
-def print_periodic_table():
-    print "element".ljust(10) + "#isotopes".center(13) + "most frequent".center(15)
-    for element in elements:
-        print element['name'].ljust(10) + str(len(element['isotopes'])).center(13) + str(int(round(element['freqisotope']['mass']))).center(15)
