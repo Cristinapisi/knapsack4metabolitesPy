@@ -3,7 +3,7 @@ __author__ = 'Cristina'
 """
 Run this with python.
  - run_locally is used to search for solutions from console for a pair mass and tolerance
-  for example, for Glucose, you would enter mass 180.063388118 and tolerance 0 or 1 and expect C6H12O6
+  for example, for Glucose, you would enter mass 180.06338811828 and tolerance 0 or 1 and expect C6H12O6
  - run_tests is used to search for solutions for a set of pairs of mass and tolerance, stored in a file, one pair per line, separated by a ','
     for example, look at Test_data_in.txt
  - run_for_frank will work with the framework in which this will be integrated, called FRANK
