@@ -1,9 +1,26 @@
 __author__ = 'Cristina'
 
 """
-for Glucose
- enter mass 180.063388118 and tolerance 0
- expect C6H12O6
+Run this with python.
+ - run_locally is used to search for solutions from console for a pair mass and tolerance
+  for example, for Glucose, you would enter mass 180.063388118 and tolerance 0 or 1 and expect C6H12O6
+ - run_tests is used to search for solutions for a set of pairs of mass and tolerance, stored in a file, one pair per line, separated by a ','
+    for example, look at Test_data_in.txt
+ - run_for_frank will work with the framework in which this will be integrated, called FRANK
+
+Parameters:
+ - what function to use:
+        - exhaustive_search
+        - knapsack  (not yet, TO DO)
+        (presumably soon opting in or out of 7 golden rules)
+        (maybe other variations in the future)
+ - in and out files where appropriate
+ - a delta which is set below as the computation error allowed.
+    At the moment it is set at the lowest value that does not affect the correctness of results
+    This is not the tolerance value for measurement errors, as those vary among experiments.
+    This is to cope with the limitations of python for high precision floats equality.
+
+Observations: this does not include the 7 golden rules at the moment
 """
 
 import datetime
@@ -53,6 +70,7 @@ def run_tests(inputfile, outputfile, function, delta):
 
     # print all formulas found for that set
     f = open(outputfile, 'w')
+    f.write("using " + str(function) + '\n')
     f.write("mass".center(15) + "tolerance(ppm)".center(10) + "formula".center(20) + "time elapsed".center(15) + "\n")
     for (mass, tolerance) in data_in:
         t1 = datetime.datetime.utcnow()
@@ -69,7 +87,8 @@ def run_for_frank():
     """
 
 if __name__ == '__main__':
-    run_locally(knapsack, delta)
+    run_locally(exhaustive_search, delta)
+    # run_locally(knapsack, delta)
     # run_tests('Test_data_in.txt', 'Test_data_out.txt', exhaustive_search, delta)
     # run_tests('Test_data_in.txt', 'Test_data_out2.txt', knapsack, delta)
     # run_for_frank()
