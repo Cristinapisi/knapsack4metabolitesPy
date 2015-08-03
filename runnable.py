@@ -1,4 +1,14 @@
+import os
+
 __author__ = 'Cristina'
+
+
+"""
+I plan to run experiments to test times for
+  exhaustive vs greedy vs SIRIUS
+  no 7rules vs post filtering with 7rules vs interleaved pruning with 7rules
+  for each of the 3 solver strategies, which 7rules approach is best
+"""
 
 """
 Run this with python.
@@ -24,14 +34,35 @@ Observations: this does not include the 7 golden rules at the moment
 """
 
 import datetime
-import exhaustive_search
-import knapsack
-from functions import get_formula_string, get_formula_mass
+import the_7rules
+from solvers import exhaustive_search, exhaustive_search_with_7rules, greedy, greedy_with_7rules, SIRIUS_knapsack, SIRIUS_knapsack_with_7rules
+from functions import get_formula_string, get_formula_mass, print_periodic_table
+
+solvers_basic = \
+    {'exhaustive':          exhaustive_search,
+     'greedy':              greedy,
+     'knapsack':            SIRIUS_knapsack}
+
+solvers_7rules = \
+    {'exhaustive_7rules':   exhaustive_search_with_7rules,
+     'greedy_7rules':       greedy_with_7rules,
+     'knapsack_7rules':     SIRIUS_knapsack_with_7rules}
+
+solvers_all = {}
+solvers_all.update(solvers_basic)
+solvers_all.update(solvers_7rules)
 
 # computation error allowed
 delta = 0.00000000001
 
 incorrect_input = "Nope, not what I asked you to enter"
+
+def read_file(input_file):
+    # read mass and tolerance pairs
+    with open(input_file,'r') as f:
+        data_in = f.read()
+    f.close()
+    return [(float(datum.split(', ')[0]), (float(datum.split(', ')[1]))/1000000) for datum in data_in.splitlines()]
 
 def run_locally(function, delta):
     """
@@ -54,27 +85,30 @@ def run_locally(function, delta):
     except NameError:
         print incorrect_input
 
-def run_tests(inputfile, outputfile, function, delta):
+def run_tests(data, solver, post_7rules, output_file, delta, restrict):
     """
-
-    :param inputfile: String with the name of the input file
-    :param outputfile: String with the name of the output file
-    :param function: for which script to run search (exhaustive_search or knapsack)
+    :param data: input data as a list of pairs
+    :param solver: a script solver
+    :param post_7rules: boolean which indicated whether to run 7rule filtering post solution finding
+    :param output_file: a string with the name of the output_files file
+    :param delta: computaion error allowed
+    :param restrict: boolean which if true means to use only CHNOPS
     :return: list of formulas
     """
-    # read mass and tolerance pairs
-    with open(inputfile,'r') as f:
-        data_in = f.read()
-    f.close()
-    data_in = [(float(datum.split(', ')[0]), (float(datum.split(', ')[1]))/1000000) for datum in data_in.splitlines()]
 
     # print all formulas found for that set
-    f = open(outputfile, 'w')
-    f.write("using " + str(function) + '\n')
+    f = open(output_file, 'w')
+    f.write("using " + str(solver) + '\n')
+    if post_7rules:
+        f.write("with post filtering using "+ str(the_7rules) + '\n')
+    else:
+        f.write("no post filtering \n")
     f.write("mass".center(15) + "tolerance(ppm)".center(10) + "formula".center(20) + "mass delta".center(20) +  "time elapsed".center(15) + "\n")
-    for (mass, tolerance) in data_in:
+    for (mass, tolerance) in data:
         t1 = datetime.datetime.utcnow()
-        formulas = function.search(mass, tolerance, delta)
+        formulas = solver.search(mass, tolerance, delta, restrict)
+        if post_7rules:
+            formulas = the_7rules.filter(formulas)
         t2 = datetime.datetime.utcnow()
         for formula in formulas:
             f.write(str(mass).rjust(15) + str(int(tolerance*1000000)).rjust(10) + get_formula_string(formula).rjust(20) + str(get_formula_mass(formula)-mass).rjust(20) +str(t2-t1).rjust(20) + "\n")
@@ -87,10 +121,21 @@ def run_for_frank():
     """
 
 if __name__ == '__main__':
-    # run_locally(exhaustive_search, delta)
-    # run_locally(knapsack, delta)
-    run_tests('Test_data_in.txt', 'Test_data_out.txt', exhaustive_search, delta)
-    # run_tests('Test_data_in.txt', 'Test_data_out2.txt', knapsack, delta)
+    # run_locally(solvers_list['exhaustive'], delta)
+    # run_locally(solvers_list['greedy'], delta)
+    # run_locally(solvers_list['greedy_7rules'], delta)
+    # run_locally(solvers_list['knapsack'], delta)
+    # run_locally(solvers_list['knapsack_7rules'], delta)
+    restrict = True
+    d_in = "input_files"
+    d_out = "output_files"
+    filenames = [(os.path.join(d_in, f), os.path.join(d_out,f)) for f in os.listdir(d_in) if os.path.isfile(os.path.join(d_in, f))]
+    for (f_in, f_out) in filenames:
+        data_in = read_file(f_in)
+        for solver in solvers_all:
+            run_tests(data_in, solvers_all[solver], False, f_out.split('.')[0]+"_"+solver+'.txt', delta, restrict)
+        for solver in solvers_basic:
+            run_tests(data_in, solvers_basic[solver], True, f_out.split('.')[0]+"_"+solver+'_post_7rules'+'.txt', delta, restrict)
     # run_for_frank()
     print "Done"
 

@@ -1,2 +1,0 @@
-using <module 'knapsack' from 'D:\Py projects\knapsack4metabolitesPy\knapsack.pyc'>
-      mass     tolerance(ppm)      formula         time elapsed 

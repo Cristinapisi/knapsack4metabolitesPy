@@ -1,6 +1,6 @@
 __author__ = 'Cristina'
 
-from periodic_table import elements
+from periodic_table import CHNOPS, elements
 from functions import add_element_to_formula
 
 
@@ -19,9 +19,12 @@ def helper_search(mass_min, mass_max, formula_mass, formula, last_index, delta):
                     helper_search(mass_min, mass_max, new_formula_mass, new_formula, index, delta)
 
 
-def search(mass, tolerance, delta):
+def search(mass, tolerance, delta, restrict):
     global formulas
     formulas = []
-    formula = [(element, 0) for element in elements]
+    if restrict:
+        formula = [(element, 0) for element in elements]
+    else:
+        formula = [(element, 0) for element in CHNOPS]
     helper_search(mass - tolerance, mass + tolerance, 0, formula, 0, delta)
     return formulas
