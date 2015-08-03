@@ -26,7 +26,7 @@ Observations: this does not include the 7 golden rules at the moment
 import datetime
 import exhaustive_search
 import knapsack
-from functions import get_formula_string
+from functions import get_formula_string, get_formula_mass
 
 # computation error allowed
 delta = 0.00000000001
@@ -71,13 +71,13 @@ def run_tests(inputfile, outputfile, function, delta):
     # print all formulas found for that set
     f = open(outputfile, 'w')
     f.write("using " + str(function) + '\n')
-    f.write("mass".center(15) + "tolerance(ppm)".center(10) + "formula".center(20) + "time elapsed".center(15) + "\n")
+    f.write("mass".center(15) + "tolerance(ppm)".center(10) + "formula".center(20) + "mass delta".center(20) +  "time elapsed".center(15) + "\n")
     for (mass, tolerance) in data_in:
         t1 = datetime.datetime.utcnow()
         formulas = function.search(mass, tolerance, delta)
         t2 = datetime.datetime.utcnow()
         for formula in formulas:
-            f.write(str(mass).rjust(15) + str(int(tolerance*1000000)).rjust(10) + get_formula_string(formula).rjust(20) + str(t2-t1).rjust(15) + "\n")
+            f.write(str(mass).rjust(15) + str(int(tolerance*1000000)).rjust(10) + get_formula_string(formula).rjust(20) + str(get_formula_mass(formula)-mass).rjust(20) +str(t2-t1).rjust(20) + "\n")
     f.close()
 
 def run_for_frank():
@@ -87,9 +87,9 @@ def run_for_frank():
     """
 
 if __name__ == '__main__':
-    run_locally(exhaustive_search, delta)
+    # run_locally(exhaustive_search, delta)
     # run_locally(knapsack, delta)
-    # run_tests('Test_data_in.txt', 'Test_data_out.txt', exhaustive_search, delta)
+    run_tests('Test_data_in.txt', 'Test_data_out.txt', exhaustive_search, delta)
     # run_tests('Test_data_in.txt', 'Test_data_out2.txt', knapsack, delta)
     # run_for_frank()
     print "Done"

@@ -8,7 +8,7 @@ def print_periodic_table():
         print element['name'].ljust(10) + str(len(element['isotopes'])).center(13) + str(int(round(element['freqisotope']['mass']))).center(15)
 
 def get_formula_string(formula):
-    return ''.join([str(number) + element['symbol'] for (element, number) in formula if number])
+    return ''.join([element['symbol'] + str(number) for (element, number) in formula if number])
 
 def get_formula_mass(formula):
     return sum([element['freqisotope']['mass'] * number for (element,number) in formula])
