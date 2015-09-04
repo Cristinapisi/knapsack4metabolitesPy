@@ -91,7 +91,7 @@ def run_tests(data, solver, post_7rules, output_file, delta, restrict):
     :param solver: a script solver
     :param post_7rules: boolean which indicated whether to run 7rule filtering post solution finding
     :param output_file: a string with the name of the output_files file
-    :param delta: computaion error allowed
+    :param delta: computation error allowed
     :param restrict: boolean which if true means to use only CHNOPS
     :return: list of formulas
     """
@@ -126,7 +126,8 @@ if __name__ == '__main__':
     # run_locally(solvers_list['greedy_7rules'], delta)
     # run_locally(solvers_list['knapsack'], delta)
     # run_locally(solvers_list['knapsack_7rules'], delta)
-    print_periodic_table(False)
+    data_in = read_file('testingthis.txt')
+    run_tests(data_in, exhaustive_search, False, 'thisresult.txt', delta, True)
     """
     restrict = True
     d_in = "input_files"
