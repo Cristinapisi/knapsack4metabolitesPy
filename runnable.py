@@ -126,6 +126,8 @@ if __name__ == '__main__':
     # run_locally(solvers_list['greedy_7rules'], delta)
     # run_locally(solvers_list['knapsack'], delta)
     # run_locally(solvers_list['knapsack_7rules'], delta)
+    print_periodic_table(False)
+    """
     restrict = True
     d_in = "input_files"
     d_out = "output_files"
@@ -136,6 +138,7 @@ if __name__ == '__main__':
             run_tests(data_in, solvers_all[solver], False, f_out.split('.')[0]+"_"+solver+'.txt', delta, restrict)
         for solver in solvers_basic:
             run_tests(data_in, solvers_basic[solver], True, f_out.split('.')[0]+"_"+solver+'_post_7rules'+'.txt', delta, restrict)
+    """
     # run_for_frank()
     print "Done"
 
