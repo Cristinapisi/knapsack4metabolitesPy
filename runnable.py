@@ -108,7 +108,7 @@ def run_tests(data, solver, post_7rules, output_file, delta, restrict):
         t1 = datetime.datetime.utcnow()
         formulas = solver.search(mass, tolerance, delta, restrict)
         if post_7rules:
-            formulas = the_7rules.filter(formulas)
+            formulas = the_7rules.filter_all(formulas, restrict)
         t2 = datetime.datetime.utcnow()
         for formula in formulas:
             f.write(str(mass).rjust(15) + str(int(tolerance*1000000)).rjust(10) + get_formula_string(formula).rjust(20) + str(get_formula_mass(formula)-mass).rjust(20) +str(t2-t1).rjust(20) + "\n")
@@ -127,7 +127,7 @@ if __name__ == '__main__':
     # run_locally(solvers_list['knapsack'], delta)
     # run_locally(solvers_list['knapsack_7rules'], delta)
     data_in = read_file('testingthis.txt')
-    run_tests(data_in, exhaustive_search, False, 'thisresult.txt', delta, True)
+    run_tests(data_in, exhaustive_search, True, 'thisresult.txt', delta, True)
     """
     restrict = True
     d_in = "input_files"

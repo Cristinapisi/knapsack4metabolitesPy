@@ -1,6 +1,5 @@
 __author__ = 'Cristina'
 
-from frozendict import frozendict
 from periodic_table import CHNOPS, elements
 
 
