@@ -52,7 +52,6 @@ def solve(data, delta, restrict, solver, post_7rules, output_file):
     :param output_file: a string with the name of the output_files file
     :return: list of formulas
     """
-    print output_file
     f = open(output_file, 'w')
     f.write("using " + str(solver) + '\n')
     if post_7rules:
@@ -61,6 +60,7 @@ def solve(data, delta, restrict, solver, post_7rules, output_file):
         f.write("no post filtering \n")
     f.write("mass".center(15) + "tolerance(ppm)".center(10) + "formula".center(20) + "mass delta".center(
         20) + "time elapsed".center(15) + "\n")
+    f.flush()
     for (mass, tolerance) in data:
         t1 = datetime.datetime.utcnow()
         formulas = solver.search(mass, tolerance, delta, restrict)
@@ -70,6 +70,7 @@ def solve(data, delta, restrict, solver, post_7rules, output_file):
         for formula in formulas:
             f.write(str(mass).rjust(15) + str(int(tolerance * 1000000)).rjust(10) + get_formula_string(formula).rjust(
                 20) + str(get_formula_mass(formula) - mass).rjust(20) + str(t2 - t1).rjust(20) + "\n")
+        f.flush()
     f.close()
 
 

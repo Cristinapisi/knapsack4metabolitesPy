@@ -38,7 +38,7 @@ def helper_search(mass_min, mass_max, formula_mass, formula, last_index, delta, 
 def search(mass, tolerance, delta, restrict):
     """
     :param mass: the formula mass
-    :param tolerance: tolerance to accomodate equipment errors
+    :param tolerance: tolerance to accommodate equipment errors
     :param delta: computation error allowed
     :param restrict: True indicates CHNOPS_restricted
     :return: a list of candidate formulas

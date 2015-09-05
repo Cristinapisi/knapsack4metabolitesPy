@@ -43,6 +43,9 @@ solvers_all.update(solvers_7rules)
 
 # computation error allowed
 delta = 0.00000000001
+# True if only using CHNOPS
+# There are no molecules outside CHNOPS in the data set.
+restricted = True
 
 incorrect_input = "Nope, not what I asked you to enter"
 
@@ -96,14 +99,12 @@ if __name__ == '__main__':
     # data_in = read_file('testingthis.txt')
     # run_tests(data_in, exhaustive_search, True, 'thisresult.txt', delta, True)
 
-    # run with just CHNOPS
-    run_for_file("Small.txt", "input_files", True)
-    run_for_file("Medium.txt", "input_files", True)
-    run_for_file("Large.txt", "input_files", True)
-    # run with all elements in the periodic_table
-    run_for_file("Small.txt", "input_files", False)
-    run_for_file("Medium.txt", "input_files", False)
-    run_for_file("Large.txt", "input_files", False)
+    run_for_file("Small.txt", "input_files", restricted)
+    print "small done"
+    run_for_file("Medium.txt", "input_files", restricted)
+    print "medium done"
+    run_for_file("Large.txt", "input_files", restricted)
+    print "large done"
 
     # run_for_frank()
     print "Done"
