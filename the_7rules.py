@@ -19,7 +19,8 @@ def element_numbers_restriction(formula, c, h, n, o, p, s, f, cl, br, restrict):
     :param restrict:  boolean which if true indicates to use only CHNOPS
     :return: True if the formula is outside restrictions
     """
-    if formula[CARBON] > c or formula[HYDROGEN] > h or formula[NITROGEN] > n or formula[OXYGEN] > o or formula[PHOSPHORUS] > p or formula[SULFUR] > s:
+    if formula[CARBON] > c or formula[HYDROGEN] > h or formula[NITROGEN] > n or formula[OXYGEN] > o or formula[
+        PHOSPHORUS] > p or formula[SULFUR] > s:
         return True
     if not restrict:
         if formula[FLUORINE] > f or formula[CHLORINE] > cl or formula[BROMINE] > br:
@@ -86,7 +87,7 @@ def rule4(formula):
     :return: True if the formula passed this test
     """
     if formula[CARBON] > 0:
-        h_c_ratio = formula[HYDROGEN]/formula[CARBON] * 1.0
+        h_c_ratio = formula[HYDROGEN] / formula[CARBON] * 1.0
         if not (6 > h_c_ratio > 0.1):
             return False
     return True
@@ -99,16 +100,16 @@ def rule5(formula, restrict):
     :return: True if the formula passed this test
     """
     if formula[CARBON] > 0:
-        n_c_ratio = formula[NITROGEN]/formula[CARBON] * 1.0
-        o_c_ratio = formula[OXYGEN]/formula[CARBON] * 1.0
-        p_c_ratio = formula[PHOSPHORUS]/formula[CARBON] * 1.0
-        s_c_ratio = formula[SULFUR]/formula[CARBON] * 1.0
+        n_c_ratio = formula[NITROGEN] / formula[CARBON] * 1.0
+        o_c_ratio = formula[OXYGEN] / formula[CARBON] * 1.0
+        p_c_ratio = formula[PHOSPHORUS] / formula[CARBON] * 1.0
+        s_c_ratio = formula[SULFUR] / formula[CARBON] * 1.0
         if not (4 > n_c_ratio and 3 > o_c_ratio and 2 > p_c_ratio and 3 > s_c_ratio):
             return False
         if not restrict:
-            f_c_ratio = formula[FLUORINE]/formula[CARBON] * 1.0
-            cl_c_ratio = formula[CHLORINE]/formula[CARBON] * 1.0
-            br_c_ratio = formula[BROMINE]/formula[CARBON] * 1.0
+            f_c_ratio = formula[FLUORINE] / formula[CARBON] * 1.0
+            cl_c_ratio = formula[CHLORINE] / formula[CARBON] * 1.0
+            br_c_ratio = formula[BROMINE] / formula[CARBON] * 1.0
             if not (6 > f_c_ratio and 2 > cl_c_ratio and 2 > br_c_ratio):
                 return False
     return True
@@ -124,10 +125,10 @@ def rule6(formula):
     o = formula[OXYGEN]
     p = formula[PHOSPHORUS]
     s = formula[SULFUR]
-    if (n > 1 and o >1 and p > 1 and s > 1 and not (n < 10 and o < 20 and p < 4 and s < 3)) or \
+    if (n > 1 and o > 1 and p > 1 and s > 1 and not (n < 10 and o < 20 and p < 4 and s < 3)) or \
             (n > 3 and p > 3 and p > 3 and not (n < 11 and o < 22 and p < 6)) or \
-            (o > 1 and p > 1 and s > 1 and not (o < 14 and p <  3 and s < 3)) or \
-            (n > 1 and p > 1 and s > 1 and not (p <  3 and s <  3 and n < 4)) or \
+            (o > 1 and p > 1 and s > 1 and not (o < 14 and p < 3 and s < 3)) or \
+            (n > 1 and p > 1 and s > 1 and not (p < 3 and s < 3 and n < 4)) or \
             (n > 6 and o > 6 and s > 6 and not (n < 19 and o < 14 and s < 8)):
         return False
     return True

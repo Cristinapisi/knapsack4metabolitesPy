@@ -4,7 +4,17 @@ from periodic_table import CHNOPS, elements
 
 
 def helper_search(mass_min, mass_max, formula_mass, formula, last_index, delta):
-    # only get here if formula_mass <= mass_max, but still some mass left
+    """
+    This function is called when the formula_mass is less than the mass_max
+    It attempts to add a new element and if still in the mass tolerance window calls itself recursively
+    :param mass_min: Minimum mass accepted for solution
+    :param mass_max: Maximum mass accepted for solution
+    :param formula_mass: The mass of the formula now
+    :param formula: The formula now
+    :param last_index: The last element added
+    :param delta: Computation error allowed
+    :return: not explicit, it adds to global list of formulas
+    """
     for index, element in enumerate(formula):
         if index >= last_index:
             new_formula_mass = formula_mass + element['freqisotope']['mass']
@@ -22,10 +32,10 @@ def helper_search(mass_min, mass_max, formula_mass, formula, last_index, delta):
 def search(mass, tolerance, delta, restrict):
     """
     :param mass: the formula mass
-    :param tolerance: tolerance to accomodate equipment errors
+    :param tolerance: tolerance to accommodate equipment errors
     :param delta: computation error allowed
-    :param restrict: boolean which if true indicates to use only CHNOPS
-    :return:
+    :param restrict: True indicates CHNOPS_restricted
+    :return: a list of candidate formulas
     """
     global formulas
     formulas = []
