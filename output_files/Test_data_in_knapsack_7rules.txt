@@ -1,3 +1,3 @@
-using <module 'solvers.SIRIUS_knapsack_with_7rules' from 'C:\Users\2168879m\knapsack4metabolitesPy\solvers\SIRIUS_knapsack_with_7rules.pyc'>
+using <module 'solvers.SIRIUS_knapsack_with_7rules' from 'C:\Users\Cristina\PycharmProjects\knapsack4metabolitesPy\solvers\SIRIUS_knapsack_with_7rules.pyc'>
 no post filtering 
       mass     tolerance(ppm)      formula            mass delta       time elapsed 

@@ -18,4 +18,4 @@ def get_formula_string(formula):
 
 
 def get_formula_mass(formula):
-    return sum([element['freqisotope']['mass'] * number for element,number in formula.iteritems()])
+    return sum([element['freqisotope']['mass'] * number for element, number in formula.iteritems()])
