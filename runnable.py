@@ -31,21 +31,12 @@ from solvers import exhaustive_search, exhaustive_search_7rules, DP_Bellman, DP_
 from functions import get_formula_string, read_file, get_output_folder, write_file_header, write_file_formulas, \
     prettyprint_solver
 
-solvers_basic = [exhaustive_search, DP_Bellman ]#,
-#     'greedy': greedy,
-#     'knapsack': knapsack}
+solvers_basic = [exhaustive_search, DP_Bellman]
 
-solvers_7rules = [exhaustive_search_7rules, DP_Bellman_7rules] #,
-#     'greedy_7rules': greedy_7rules,
-#     'knapsack_7rules': knapsack_7rules}
+solvers_7rules = [exhaustive_search_7rules, DP_Bellman_7rules]
 
 # computation error allowed
 delta = 0.00000000001
-# True if only using CHNOPS
-# There are no molecules outside CHNOPS in the data set.
-restricted = True
-
-incorrect_input = "\n The input was not correctly formatted \n restarting..."
 
 
 def run_locally():
@@ -54,6 +45,9 @@ def run_locally():
     Enter manually: 1 mass and 1 tolerance (in ppm)
     :return: print formulas
     """
+
+    # message for run_locally
+    incorrect_input = "\n The input was not correctly formatted \n restarting..."
 
     try:
         # display algorithms
@@ -123,11 +117,10 @@ def run_locally():
         run_locally()
 
 
-
-def run_for_file(filein, location, restrict):
+def run_for_file(filein, location, solver, restrict):
     data_in = read_file(os.path.join(location, filein))
     output_folder = get_output_folder(filein, "output_files", restrict)
-    for solver in solvers_7rules:
+    if solver in solvers_7rules:
         output_file = os.path.join(output_folder, prettyprint_solver(solver) + '.txt')
         file_handler = write_file_header(output_file, False)
         for (mass, tolerance) in data_in:
@@ -136,7 +129,7 @@ def run_for_file(filein, location, restrict):
             t2 = datetime.datetime.utcnow()
             write_file_formulas(file_handler, formulas,mass, tolerance, t2-t1)
         file_handler.close()
-    for solver in solvers_basic:
+    elif solver in solvers_basic:
         output_file = os.path.join(output_folder, prettyprint_solver(solver) + '.txt')
         output_file_filtered = os.path.join(output_folder, prettyprint_solver(solver) + '_post_7rules.txt')
         file_handler = write_file_header(output_file, False)
@@ -162,23 +155,47 @@ def run_for_frank():
 
 
 if __name__ == '__main__':
-    # run_locally(solvers_list['exhaustive'], delta)
-    # run_locally(solvers_list['greedy'], delta)
-    # run_locally(solvers_list['greedy_7rules'], delta)
-    # run_locally(solvers_list['knapsack'], delta)
-    # run_locally(solvers_list['knapsack_7rules'], delta)
 
-    # run_for_file('testingthis.txt', '', True)
-
+    # run from console
+  #  """
     run_locally()
+  #  """
 
+    # True if only using CHNOPS
+    # There are no molecules outside CHNOPS in the data set.
+    restricted = True
+
+    # run for exhaustive search with and without post filtering
     """
     sys.setrecursionlimit(1500)
 
-    run_for_file("Large.txt", "input_files", restricted)
-    print "large done"
+    run_for_file("Small.txt", "input_files", solvers_basic[0], restricted)
+    run_for_file("Medium.txt", "input_files", solvers_basic[0], restricted)
+    run_for_file("Large.txt", "input_files", solvers_basic[0], restricted)
     """
 
+    # run for DP_Bellman with and without post filtering
+    """
+    run_for_file("Small.txt", "input_files", solvers_basic[1], restricted)
+    run_for_file("Medium.txt", "input_files", solvers_basic[1], restricted)
+    run_for_file("Large.txt", "input_files", solvers_basic[1], restricted)
+    """
+
+    # run for exhaustive search with 7 rules pruning
+    """
+    sys.setrecursionlimit(1500)
+
+    run_for_file("Small.txt", "input_files", solvers_7rules[0], restricted)
+    run_for_file("Medium.txt", "input_files", solvers_7rules[0], restricted)
+    run_for_file("Large.txt", "input_files", solvers_rules[0], restricted)
+    """
+
+    # run for DP_Bellman with 7 rules pruning
+    """
+    run_for_file("Small.txt", "input_files", solvers_7rules[1], restricted)
+    run_for_file("Medium.txt", "input_files", solvers_7rules[1], restricted)
+    run_for_file("Large.txt", "input_files", solvers_rules[1], restricted)
+    """
 
     # run_for_frank()
     print "Done"
