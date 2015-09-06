@@ -1,0 +1,7 @@
+with post filtering using <module 'the_7rules' from 'C:\Users\Cristina\PycharmProjects\knapsack4metabolitesPy\the_7rules.pyc'>
+      mass     tolerance(ppm)      formula            mass delta       time elapsed 
+   204.08987764        16          N2H12O2C11   3.59989371645e-10      0:00:02.149000
+  147.053157783        16            N1H9O4C5  -9.99875737762e-11      0:00:00.420000
+  133.037507719        14            N1H7O4C4  -3.79998255085e-10      0:00:00.255000
+  376.138284396         9          N4H20O6C17   3.59989371645e-10      0:00:43.320000
+  194.080375587        10           N4H10O2C8  -4.39996483692e-10      0:00:01.545000

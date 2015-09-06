@@ -1,0 +1,3 @@
+no post filtering 
+      mass     tolerance(ppm)      formula            mass delta       time elapsed 
+  28.0313001286         1                H4C2  -4.00035560233e-11      0:00:00.286000
