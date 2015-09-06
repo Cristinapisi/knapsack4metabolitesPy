@@ -45,10 +45,10 @@ delta = 0.00000000001
 # There are no molecules outside CHNOPS in the data set.
 restricted = True
 
-incorrect_input = "Nope, not what I asked you to enter"
+incorrect_input = "\n The input was not correctly formatted \n restarting..."
 
 
-def run_locally(function, delta):
+def run_locally():
     """
     Run from console
     Enter manually: 1 mass and 1 tolerance (in ppm)
@@ -56,18 +56,70 @@ def run_locally(function, delta):
     """
 
     try:
+        # display algorithms
+        i = 1
+        for solver in solvers_basic:
+            print str(i) + " " + prettyprint_solver(solver)
+            i += 1
+        for solver in solvers_7rules:
+            print str(i) + " " + prettyprint_solver(solver)
+            i += 1
+        print
+
+        # get input from user
+        algorithm = int(input("Enter number for your choice: "))
         mass = float(input("Enter a mass: "))
         tolerance = float(input("Enter a tolerance (in ppm): ")) / 1000000
+        if algorithm <= len(solvers_basic):
+            function = solvers_basic[algorithm-1]
+        else:
+            function = solvers_7rules[algorithm - len(solvers_basic) - 1]
+        print function
+        print
+        print "Would you like to restrict the search to CHNOPS? (recommended)"
+        choice = raw_input("Enter y/n: ")
+        restrict = False
+        if choice == 'y':
+            restrict = True
+        print
+
+
+        # perform search using input
         t1 = datetime.datetime.utcnow()
-        formulas = function.search(mass, tolerance, delta, True)
+        formulas = function.search(mass, tolerance, delta, restrict)
         t2 = datetime.datetime.utcnow()
         for formula in formulas:
             print get_formula_string(formula)
+        if len(formulas) == 0:
+            print "No results"
         print "Search time: " + str(t2 - t1)
+        print
+
+        # get input for filtering and proceed as required
+        print "Would you like to filter these? "
+        choice = raw_input("Enter y/n: ")
+        if choice == 'y':
+            t1 = datetime.datetime.utcnow()
+            formulas_filtered = the_7rules.filter_all(formulas, restrict)
+            for formula in formulas_filtered:
+                print get_formula_string(formula)
+            if len(formulas_filtered) == 0:
+                print "No results"
+            t2 = datetime.datetime.utcnow()
+            print "Filter time: " + str(t2-t1)
+        print
+
+        # ask if to terminate
+        print "This iteration is done, would you like to go again? "
+        choice = raw_input("Enter y/n: ")
+        if choice == 'y':
+            run_locally()
     except SyntaxError:
         print incorrect_input
+        run_locally()
     except NameError:
         print incorrect_input
+        run_locally()
 
 
 def run_for_file(filein, location, restrict):
@@ -86,7 +138,7 @@ def run_for_file(filein, location, restrict):
         output_file = os.path.join(output_folder, prettyprint_solver(solver) + '.txt')
         output_file_filtered = os.path.join(output_folder, prettyprint_solver(solver) + '_post_7rules.txt')
         file_handler = write_file_header(output_file, False)
-        file_handler_filtered = write_file_header(output_file_filtered, solver, True)
+        file_handler_filtered = write_file_header(output_file_filtered, True)
         for (mass, tolerance) in data_in:
             t1 = datetime.datetime.utcnow()
             formulas = solver.search(mass, tolerance, delta, restrict)
@@ -114,7 +166,9 @@ if __name__ == '__main__':
     # run_locally(solvers_list['knapsack'], delta)
     # run_locally(solvers_list['knapsack_7rules'], delta)
 
-    run_for_file('testingthis.txt', '', True)
+    # run_for_file('testingthis.txt', '', True)
+
+    run_locally()
 
     """
     sys.setrecursionlimit(1500)

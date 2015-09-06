@@ -14,6 +14,10 @@ def get_formula_mass(formula):
     return sum([element['freqisotope']['mass'] * number for element, number in formula.iteritems()])
 
 
+def get_formula_mass_int(formula):
+    return sum([element['freqisotope']['mass_int'] * number for element, number in formula.iteritems()])
+
+
 def get_output_folder(filein, location, restrict):
     """
 
