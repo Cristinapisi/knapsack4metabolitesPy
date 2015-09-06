@@ -82,7 +82,6 @@ def run_locally():
             restrict = True
         print
 
-
         # perform search using input
         t1 = datetime.datetime.utcnow()
         formulas = function.search(mass, tolerance, delta, restrict)
@@ -113,12 +112,16 @@ def run_locally():
         choice = raw_input("Enter y/n: ")
         if choice == 'y':
             run_locally()
-    except SyntaxError:
+    except SyntaxError as se:
         print incorrect_input
         run_locally()
-    except NameError:
+    except NameError as ne:
         print incorrect_input
         run_locally()
+    except IndexError as ie:
+        print incorrect_input
+        run_locally()
+
 
 
 def run_for_file(filein, location, restrict):

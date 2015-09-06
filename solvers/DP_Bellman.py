@@ -1,33 +1,36 @@
 import math
+from functions import get_formula_mass, get_formula_string
 
 __author__ = '2168879m'
 
 from periodic_table import CHNOPS, elements
 
 
-def helper_search(prev_row, max_c, element_list, last_index, repetitions, empty_formula):
+def helper_search(prev_row, max_c, element_list, last_index, repetitions, empty_formula, terminate):
     this_row = [(0, empty_formula)]
     this_mass = element_list[last_index]['freqisotope']['mass_int']
-    while repetitions < 1 and last_index < len(element_list)-1:
+    while repetitions < 1 and last_index < len(element_list):
         last_index += 1
-        this_mass = element_list[last_index]['freqisotope']['mass_int']
-        repetitions = int(math.ceil(max_c / this_mass))
-    repetitions -= 1
-    for c in range(1, max_c):
-        if this_mass > c:
-            this_row.append(prev_row[c])
+        if last_index == len(element_list):
+            terminate = True
         else:
-            (prev_mass, prev_formula) = prev_row[c]
-            (other_mass, other_formula) = prev_row[c - this_mass]
-            if prev_mass >= other_mass:
+            this_mass = element_list[last_index]['freqisotope']['mass_int']
+            repetitions = int(math.ceil(max_c / this_mass))
+    repetitions -= 1
+    if not terminate:
+        for c in range(1, max_c):
+            if this_mass > c:
                 this_row.append(prev_row[c])
             else:
-                new_formula = other_formula.copy()
-                new_formula[element_list[last_index]] += 1
-                this_row.append((this_mass + other_mass, new_formula))
-    print this_row
-    return this_row, last_index, repetitions
-
+                (prev_mass, prev_formula) = prev_row[c]
+                (other_mass, other_formula) = prev_row[c - this_mass]
+                if prev_mass > this_mass + other_mass:
+                    this_row.append(prev_row[c])
+                else:
+                    new_formula = other_formula.copy()
+                    new_formula[element_list[last_index]] += 1
+                    this_row.append((this_mass + other_mass, new_formula))
+    return this_row, last_index, repetitions, terminate
 
 
 def search(mass, tolerance, delta, restrict):
@@ -49,7 +52,6 @@ def search(mass, tolerance, delta, restrict):
 
     # this algorithm work with int masses
     mass_total = int(math.floor(mass) + 1)
-    mass_left = mass_total
 
     # n is the enumber of decision points
     # for this unbounded implementation: n <= number_elements * mass
@@ -65,14 +67,23 @@ def search(mass, tolerance, delta, restrict):
     i = 0
     last_index = 0
     repetitions = 0
-    while i < n:
+    terminate = False
+    while i < n and not terminate:
         i += 1
         if i % 2 == 0:
-            (even_row, last_index, repetitions) = helper_search(odd_row, mass_total, element_list, last_index, repetitions, formula)
-        else:
-            (odd_row, last_index, repetitions) = helper_search(even_row, mass_total, element_list, last_index, repetitions, formula)
+            (even_row, last_index, repetitions, terminate) = helper_search(odd_row, mass_total, element_list,
+                                                                           last_index, repetitions, formula, terminate)
+            (x, candidate) = even_row[-1]
+            candidate_mass = get_formula_mass(candidate)
+            if candidate_mass + tolerance - mass >= -delta and mass + tolerance - candidate_mass >= -delta and not candidate in formulas:
+                formulas.append(candidate)
 
-    print odd_row
-    print even_row
+        else:
+            (odd_row, last_index, repetitions, terminate) = helper_search(even_row, mass_total, element_list,
+                                                                          last_index, repetitions, formula, terminate)
+            (x, candidate) = odd_row[-1]
+            candidate_mass = get_formula_mass(candidate)
+            if candidate_mass + tolerance - mass >= -delta and mass + tolerance - candidate_mass >= -delta and not candidate in formulas:
+                formulas.append(candidate)
 
     return formulas
