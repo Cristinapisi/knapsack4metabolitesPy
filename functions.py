@@ -31,6 +31,10 @@ def get_output_folder(filein, location, restrict):
     return output_folder
 
 
+def prettyprint_solver(solver):
+    return solver.__name__.split('.')[1]
+
+
 def read_file(filein):
     """
     :param filein: the file path fron which to read
@@ -42,9 +46,8 @@ def read_file(filein):
     return [(float(datum.split(', ')[0]), (float(datum.split(', ')[1])) / 1000000) for datum in data_in.splitlines()]
 
 
-def write_file_header(fileout, solver, post_7rules):
+def write_file_header(fileout, post_7rules):
     f = open(fileout, 'w')
-    f.write("using" + str(solver) + '\n')
     if post_7rules:
         f.write("with post filtering using " + str(the_7rules) + '\n')
     else:
@@ -61,33 +64,6 @@ def write_file_formulas(fileout, formulas, mass, tolerance, time):
             str(mass).rjust(15) + str(int(tolerance * 1000000)).rjust(10) + get_formula_string(formula).rjust(20) + str(
                 get_formula_mass(formula) - mass).rjust(20) + str(time).rjust(20) + "\n")
     fileout.flush()
-
-
-def solve(data, delta, restrict, solver, post_7rules, output_file, output_file_filtered):
-    """
-    :param data: input data as a list of pairs
-    :param delta: computation error allowed
-    :param restrict: boolean which if true means to use only CHNOPS
-    :param solver: a script solver
-    :param post_7rules: boolean which indicated whether to run 7rule filtering post solution finding
-    :param output_file: a string with the name of the output_files file
-    :return: list of formulas
-    """
-    file_handler = write_file_header(output_file, solver, False)
-    if post_7rules:
-        file_handler_filtered = write_file_header(output_file_filtered, solver, True)
-    for (mass, tolerance) in data:
-        t1 = datetime.datetime.utcnow()
-        formulas = solver.search(mass, tolerance, delta, restrict)
-        t2 = datetime.datetime.utcnow()
-        if post_7rules:
-            formulas_filtered = the_7rules.filter_all(formulas, restrict)
-        t3 = datetime.datetime.utcnow()
-        write_file_formulas(file_handler, formulas, mass, tolerance, t2-t1)
-        if post_7rules:
-            write_file_formulas(file_handler_filtered, formulas_filtered, mass, tolerance, t3-t1)
-    file_handler.close()
-    file_handler_filtered.close()
 
 
 def print_periodic_table(restrict):

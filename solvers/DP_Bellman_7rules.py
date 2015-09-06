@@ -1,4 +1,4 @@
-__author__ = 'Cristina'
+__author__ = '2168879m'
 
 from periodic_table import CHNOPS, elements
 
@@ -15,18 +15,6 @@ def helper_search(mass_min, mass_max, formula_mass, formula, last_index, delta):
     :param delta: Computation error allowed
     :return: not explicit, it adds to global list of formulas
     """
-    for index, element in enumerate(formula):
-        if index >= last_index:
-            new_formula_mass = formula_mass + element['freqisotope']['mass']
-            if mass_max - new_formula_mass >= -delta:
-                new_formula = formula.copy()
-                new_formula[element] += 1
-                if new_formula_mass - mass_min >= -delta:
-                    # formula in tolerance interval, add it to solutions
-                    formulas.append(new_formula)
-                else:
-                    # still some mass left, keep searching
-                    helper_search(mass_min, mass_max, new_formula_mass, new_formula, index, delta)
 
 
 def search(mass, tolerance, delta, restrict):

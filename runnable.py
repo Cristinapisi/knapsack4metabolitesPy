@@ -1,4 +1,5 @@
 import sys
+import the_7rules
 
 __author__ = 'Cristina'
 
@@ -26,16 +27,15 @@ Parameters:
 
 import os
 import datetime
-from solvers import exhaustive_search, exhaustive_search_7rules, greedy, greedy_7rules, knapsack, knapsack_7rules
-from functions import get_formula_string, solve, read_file, get_output_folder
+from solvers import exhaustive_search, exhaustive_search_7rules, DP_Bellman, DP_Bellman_7rules, knapsack, knapsack_7rules
+from functions import get_formula_string, read_file, get_output_folder, write_file_header, write_file_formulas, \
+    prettyprint_solver
 
-solvers_basic = \
-    {'exhaustive': exhaustive_search} #,
+solvers_basic = [exhaustive_search, DP_Bellman ]#,
 #     'greedy': greedy,
 #     'knapsack': knapsack}
 
-solvers_7rules = \
-    {'exhaustive_7rules': exhaustive_search_7rules} #,
+solvers_7rules = [exhaustive_search_7rules, DP_Bellman_7rules] #,
 #     'greedy_7rules': greedy_7rules,
 #     'knapsack_7rules': knapsack_7rules}
 
@@ -59,7 +59,7 @@ def run_locally(function, delta):
         mass = float(input("Enter a mass: "))
         tolerance = float(input("Enter a tolerance (in ppm): ")) / 1000000
         t1 = datetime.datetime.utcnow()
-        formulas = function.search(mass, tolerance, delta)
+        formulas = function.search(mass, tolerance, delta, True)
         t2 = datetime.datetime.utcnow()
         for formula in formulas:
             print get_formula_string(formula)
@@ -74,15 +74,35 @@ def run_for_file(filein, location, restrict):
     data_in = read_file(os.path.join(location, filein))
     output_folder = get_output_folder(filein, "output_files", restrict)
     for solver in solvers_7rules:
-        solve(data_in, delta, restrict, solvers_7rules[solver], False, os.path.join(output_folder, solver + '.txt'), "")
+        output_file = os.path.join(output_folder, prettyprint_solver(solver) + '.txt')
+        file_handler = write_file_header(output_file, False)
+        for (mass, tolerance) in data_in:
+            t1 = datetime.datetime.utcnow()
+            formulas = solver.search(mass, tolerance, delta, restrict)
+            t2 = datetime.datetime.utcnow()
+            write_file_formulas(file_handler, formulas,mass, tolerance, t2-t1)
+        file_handler.close()
     for solver in solvers_basic:
-        solve(data_in, delta, restrict, solvers_basic[solver], True, os.path.join(output_folder, solver + '.txt'),
-              os.path.join(output_folder, solver + '_post_7rules' + '.txt'))
+        output_file = os.path.join(output_folder, prettyprint_solver(solver) + '.txt')
+        output_file_filtered = os.path.join(output_folder, prettyprint_solver(solver) + '_post_7rules.txt')
+        file_handler = write_file_header(output_file, False)
+        file_handler_filtered = write_file_header(output_file_filtered, solver, True)
+        for (mass, tolerance) in data_in:
+            t1 = datetime.datetime.utcnow()
+            formulas = solver.search(mass, tolerance, delta, restrict)
+            t2 = datetime.datetime.utcnow()
+            formulas_filtered = the_7rules.filter_all(formulas, restrict)
+            t3 = datetime.datetime.utcnow()
+            write_file_formulas(file_handler, formulas, mass, tolerance, t2-t1)
+            write_file_formulas(file_handler_filtered, formulas_filtered, mass, tolerance, t3-t1)
+        file_handler.close()
+        file_handler_filtered.close()
 
 
 def run_for_frank():
     """
     TO DO
+    It will take some annotations as parameters, make the appropriate calls to solvers and return an annotation
     :return:
     """
 
@@ -94,13 +114,15 @@ if __name__ == '__main__':
     # run_locally(solvers_list['knapsack'], delta)
     # run_locally(solvers_list['knapsack_7rules'], delta)
 
-    # data_in = read_file('testingthis.txt')
-    # run_tests(data_in, exhaustive_search, True, 'thisresult.txt', delta, True)
+    run_for_file('testingthis.txt', '', True)
 
+    """
     sys.setrecursionlimit(1500)
 
     run_for_file("Large.txt", "input_files", restricted)
     print "large done"
+    """
+
 
     # run_for_frank()
     print "Done"
