@@ -1,3 +1,5 @@
+import sys
+
 __author__ = 'Cristina'
 
 """
@@ -28,18 +30,14 @@ from solvers import exhaustive_search, exhaustive_search_7rules, greedy, greedy_
 from functions import get_formula_string, solve, read_file, get_output_folder
 
 solvers_basic = \
-    {'exhaustive': exhaustive_search,
-     'greedy': greedy,
-     'knapsack': knapsack}
+    {'exhaustive': exhaustive_search} #,
+#     'greedy': greedy,
+#     'knapsack': knapsack}
 
 solvers_7rules = \
-    {'exhaustive_7rules': exhaustive_search_7rules,
-     'greedy_7rules': greedy_7rules,
-     'knapsack_7rules': knapsack_7rules}
-
-solvers_all = {}
-solvers_all.update(solvers_basic)
-solvers_all.update(solvers_7rules)
+    {'exhaustive_7rules': exhaustive_search_7rules} #,
+#     'greedy_7rules': greedy_7rules,
+#     'knapsack_7rules': knapsack_7rules}
 
 # computation error allowed
 delta = 0.00000000001
@@ -75,10 +73,10 @@ def run_locally(function, delta):
 def run_for_file(filein, location, restrict):
     data_in = read_file(os.path.join(location, filein))
     output_folder = get_output_folder(filein, "output_files", restrict)
-    for solver in solvers_all:
-        solve(data_in, delta, restrict, solvers_all[solver], False, os.path.join(output_folder, solver + '.txt'))
+    for solver in solvers_7rules:
+        solve(data_in, delta, restrict, solvers_7rules[solver], False, os.path.join(output_folder, solver + '.txt'), "")
     for solver in solvers_basic:
-        solve(data_in, delta, restrict, solvers_basic[solver], True,
+        solve(data_in, delta, restrict, solvers_basic[solver], True, os.path.join(output_folder, solver + '.txt'),
               os.path.join(output_folder, solver + '_post_7rules' + '.txt'))
 
 
@@ -99,10 +97,8 @@ if __name__ == '__main__':
     # data_in = read_file('testingthis.txt')
     # run_tests(data_in, exhaustive_search, True, 'thisresult.txt', delta, True)
 
-    run_for_file("Small.txt", "input_files", restricted)
-    print "small done"
-    run_for_file("Medium.txt", "input_files", restricted)
-    print "medium done"
+    sys.setrecursionlimit(1500)
+
     run_for_file("Large.txt", "input_files", restricted)
     print "large done"
 

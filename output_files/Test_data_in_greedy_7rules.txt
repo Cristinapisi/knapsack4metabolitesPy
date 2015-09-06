@@ -1,3 +1,0 @@
-using <module 'solvers.greedy_with_7rules' from 'C:\Users\Cristina\PycharmProjects\knapsack4metabolitesPy\solvers\greedy_with_7rules.pyc'>
-no post filtering 
-      mass     tolerance(ppm)      formula            mass delta       time elapsed 

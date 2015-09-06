@@ -1,0 +1,3 @@
+using <module 'solvers.exhaustive_search' from 'C:\Users\Cristina\PycharmProjects\knapsack4metabolitesPy\solvers\exhaustive_search.pyc'>
+no post filtering 
+      mass     tolerance(ppm)      formula            mass delta       time elapsed 

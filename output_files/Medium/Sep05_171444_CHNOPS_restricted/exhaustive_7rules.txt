@@ -1,0 +1,9 @@
+using <module 'solvers.exhaustive_search_7rules' from 'C:\Users\Cristina\PycharmProjects\knapsack4metabolitesPy\solvers\exhaustive_search_7rules.pyc'>
+no post filtering 
+      mass     tolerance(ppm)      formula            mass delta       time elapsed 
+  522.537581494         2            H70O2C35                 0.0      0:06:54.151000
+  712.185078977        13           H36O19C31  -5.99129634793e-11      0:25:12.693000
+  712.185078977        13       H33S3N12P1C32   8.72850000633e-06      0:25:12.693000
+  702.361527201         4           H54O12C38  -2.39879227593e-10      0:23:53.037000
+  682.216773036        18     H39S3N12O3P1C25   8.72864006851e-06      0:21:04.929000
+  682.216773036        18        H30N14O12C22  -1.05332399016e-05      0:21:04.929000

@@ -29,6 +29,36 @@ def helper_search(mass_min, mass_max, formula_mass, formula, last_index, delta):
                     helper_search(mass_min, mass_max, new_formula_mass, new_formula, index, delta)
 
 
+def helper_search2(mass_min, mass_max, formula_mass, formula, last_index, delta):
+    """
+    This function is called when the formula_mass is less than the mass_max
+    It attempts to add a new element and if still in the mass tolerance window calls itself recursively
+    :param mass_min: Minimum mass accepted for solution
+    :param mass_max: Maximum mass accepted for solution
+    :param formula_mass: The mass of the formula now
+    :param formula: The formula now
+    :param last_index: The last element added
+    :param delta: Computation error allowed
+    :return: not explicit, it adds to global list of formulas
+    """
+
+    new_formula_mass = formula_mass + formula[0]['freqisotope']['mass']
+    while mass_max - new_formula_mass >= -delta:
+        for index, element in enumerate (formula):
+            print "this"
+    for index, element in enumerate(formula):
+        if index >= last_index:
+            new_formula_mass = formula_mass + element['freqisotope']['mass']
+            if mass_max - new_formula_mass >= -delta:
+                new_formula = formula.copy()
+                new_formula[element] += 1
+                if new_formula_mass - mass_min >= -delta:
+                    # formula in tolerance interval, add it to solutions
+                    formulas.append(new_formula)
+                else:
+                    # still some mass left, keep searching
+                    helper_search(mass_min, mass_max, new_formula_mass, new_formula, index, delta)
+
 def search(mass, tolerance, delta, restrict):
     """
     :param mass: the formula mass

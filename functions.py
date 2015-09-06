@@ -42,7 +42,28 @@ def read_file(filein):
     return [(float(datum.split(', ')[0]), (float(datum.split(', ')[1])) / 1000000) for datum in data_in.splitlines()]
 
 
-def solve(data, delta, restrict, solver, post_7rules, output_file):
+def write_file_header(fileout, solver, post_7rules):
+    f = open(fileout, 'w')
+    f.write("using" + str(solver) + '\n')
+    if post_7rules:
+        f.write("with post filtering using " + str(the_7rules) + '\n')
+    else:
+        f.write("no post filtering \n")
+    f.write("mass".center(15) + "tolerance(ppm)".center(10) + "formula".center(20) + "mass delta".center(
+        20) + "time elapsed".center(15) + "\n")
+    f.flush()
+    return f
+
+
+def write_file_formulas(fileout, formulas, mass, tolerance, time):
+    for formula in formulas:
+        fileout.write(
+            str(mass).rjust(15) + str(int(tolerance * 1000000)).rjust(10) + get_formula_string(formula).rjust(20) + str(
+                get_formula_mass(formula) - mass).rjust(20) + str(time).rjust(20) + "\n")
+    fileout.flush()
+
+
+def solve(data, delta, restrict, solver, post_7rules, output_file, output_file_filtered):
     """
     :param data: input data as a list of pairs
     :param delta: computation error allowed
@@ -52,26 +73,21 @@ def solve(data, delta, restrict, solver, post_7rules, output_file):
     :param output_file: a string with the name of the output_files file
     :return: list of formulas
     """
-    f = open(output_file, 'w')
-    f.write("using " + str(solver) + '\n')
+    file_handler = write_file_header(output_file, solver, False)
     if post_7rules:
-        f.write("with post filtering using " + str(the_7rules) + '\n')
-    else:
-        f.write("no post filtering \n")
-    f.write("mass".center(15) + "tolerance(ppm)".center(10) + "formula".center(20) + "mass delta".center(
-        20) + "time elapsed".center(15) + "\n")
-    f.flush()
+        file_handler_filtered = write_file_header(output_file_filtered, solver, True)
     for (mass, tolerance) in data:
         t1 = datetime.datetime.utcnow()
         formulas = solver.search(mass, tolerance, delta, restrict)
-        if post_7rules:
-            formulas = the_7rules.filter_all(formulas, restrict)
         t2 = datetime.datetime.utcnow()
-        for formula in formulas:
-            f.write(str(mass).rjust(15) + str(int(tolerance * 1000000)).rjust(10) + get_formula_string(formula).rjust(
-                20) + str(get_formula_mass(formula) - mass).rjust(20) + str(t2 - t1).rjust(20) + "\n")
-        f.flush()
-    f.close()
+        if post_7rules:
+            formulas_filtered = the_7rules.filter_all(formulas, restrict)
+        t3 = datetime.datetime.utcnow()
+        write_file_formulas(file_handler, formulas, mass, tolerance, t2-t1)
+        if post_7rules:
+            write_file_formulas(file_handler_filtered, formulas_filtered, mass, tolerance, t3-t1)
+    file_handler.close()
+    file_handler_filtered.close()
 
 
 def print_periodic_table(restrict):
