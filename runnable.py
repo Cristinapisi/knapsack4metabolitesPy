@@ -31,12 +31,15 @@ from solvers import exhaustive_search, exhaustive_search_7rules, DP_Bellman, DP_
 from functions import get_formula_string, read_file, get_output_folder, write_file_header, write_file_formulas, \
     prettyprint_solver
 
-solvers_basic = [exhaustive_search, DP_Bellman]
-
-solvers_7rules = [exhaustive_search_7rules, DP_Bellman_7rules]
+solvers_basic = [exhaustive_search, DP_Bellman, knapsack]
+solvers_7rules = [exhaustive_search_7rules, DP_Bellman_7rules, knapsack_7rules]
 
 # computation error allowed
 delta = 0.00000000001
+
+# You should not use recursion in python for a depth of 1000 or more
+# To run a recursive algorithm for masses > 999, uncomment the next line; strongly discourage bigger number
+# sys.setrecursionlimit(1500)
 
 
 def run_locally():
@@ -157,45 +160,47 @@ def run_for_frank():
 if __name__ == '__main__':
 
     # run from console
-  #  """
- #   run_locally()
-  #  """
+    run_locally()
 
-    # True if only using CHNOPS
-    # There are no molecules outside CHNOPS in the data set.
+    # There are no molecules outside CHNOPS in the data sets
+    # Might as well restrict the search to CHNOPS
     restricted = True
 
     # run for exhaustive search with and without post filtering
     """
     run_for_file("Small.txt", "input_files", solvers_basic[0], restricted)
     run_for_file("Medium.txt", "input_files", solvers_basic[0], restricted)
-    sys.setrecursionlimit(1500)
-    run_for_file("Large.txt", "input_files", solvers_basic[0], restricted)
     """
 
     # run for DP_Bellman with and without post filtering
     """
     run_for_file("Small.txt", "input_files", solvers_basic[1], restricted)
     run_for_file("Medium.txt", "input_files", solvers_basic[1], restricted)
-    run_for_file("Large.txt", "input_files", solvers_basic[1], restricted)
+    """
+
+    # run for knapsack with and without post filtering
+    """
+    run_for_file("Small.txt", "input_files", solvers_basic[2], restricted)
+    run_for_file("Medium.txt", "input_files", solvers_basic[2], restricted)
     """
 
     # run for exhaustive search with 7 rules pruning
     """
     run_for_file("Small.txt", "input_files", solvers_7rules[0], restricted)
     run_for_file("Medium.txt", "input_files", solvers_7rules[0], restricted)
-    sys.setrecursionlimit(1500)
-    run_for_file("Large.txt", "input_files", solvers_rules[0], restricted)
     """
 
     # run for DP_Bellman with 7 rules pruning
-
+    """
     run_for_file("Small.txt", "input_files", solvers_7rules[1], restricted)
-    print datetime.datetime.utcnow()
     run_for_file("Medium.txt", "input_files", solvers_7rules[1], restricted)
-    print datetime.datetime.utcnow()
-#    run_for_file("Large.txt", "input_files", solvers_7rules[1], restricted)
+    """
 
+    # run for knapsack with 7 rules pruning
+    """
+    run_for_file("Small.txt", "input_files", solvers_7rules[2], restricted)
+    run_for_file("Medium.txt", "input_files", solvers_7rules[2], restricted)
+    """
 
     # run_for_frank()
     print "Done"
