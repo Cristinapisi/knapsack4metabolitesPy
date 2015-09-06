@@ -75,6 +75,9 @@ def search(mass, tolerance, delta, restrict):
                                                                            last_index, repetitions, formula, terminate)
             (x, candidate) = even_row[-1]
             candidate_mass = get_formula_mass(candidate)
+            if candidate_mass - mass > 2 * tolerance + delta and len(even_row) > 1:
+                (x, candidate) = even_row[-2]
+                candidate_mass = get_formula_mass(candidate)
             if candidate_mass + tolerance - mass >= -delta and mass + tolerance - candidate_mass >= -delta and not candidate in formulas:
                 formulas.append(candidate)
 
@@ -83,6 +86,9 @@ def search(mass, tolerance, delta, restrict):
                                                                           last_index, repetitions, formula, terminate)
             (x, candidate) = odd_row[-1]
             candidate_mass = get_formula_mass(candidate)
+            if candidate_mass - mass > 2 * tolerance + delta and len(odd_row) > 1:
+                (x, candidate) = odd_row[-2]
+                candidate_mass = get_formula_mass(candidate)
             if candidate_mass + tolerance - mass >= -delta and mass + tolerance - candidate_mass >= -delta and not candidate in formulas:
                 formulas.append(candidate)
 
