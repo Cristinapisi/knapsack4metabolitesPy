@@ -74,7 +74,6 @@ def run_locally():
             function = solvers_basic[algorithm-1]
         else:
             function = solvers_7rules[algorithm - len(solvers_basic) - 1]
-        print function
         print
         print "Would you like to restrict the search to CHNOPS? (recommended)"
         choice = raw_input("Enter y/n: ")
