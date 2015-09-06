@@ -158,7 +158,7 @@ if __name__ == '__main__':
 
     # run from console
   #  """
-    run_locally()
+ #   run_locally()
   #  """
 
     # True if only using CHNOPS
@@ -167,10 +167,9 @@ if __name__ == '__main__':
 
     # run for exhaustive search with and without post filtering
     """
-    sys.setrecursionlimit(1500)
-
     run_for_file("Small.txt", "input_files", solvers_basic[0], restricted)
     run_for_file("Medium.txt", "input_files", solvers_basic[0], restricted)
+    sys.setrecursionlimit(1500)
     run_for_file("Large.txt", "input_files", solvers_basic[0], restricted)
     """
 
@@ -183,19 +182,20 @@ if __name__ == '__main__':
 
     # run for exhaustive search with 7 rules pruning
     """
-    sys.setrecursionlimit(1500)
-
     run_for_file("Small.txt", "input_files", solvers_7rules[0], restricted)
     run_for_file("Medium.txt", "input_files", solvers_7rules[0], restricted)
+    sys.setrecursionlimit(1500)
     run_for_file("Large.txt", "input_files", solvers_rules[0], restricted)
     """
 
     # run for DP_Bellman with 7 rules pruning
-    """
+
     run_for_file("Small.txt", "input_files", solvers_7rules[1], restricted)
+    print datetime.datetime.utcnow()
     run_for_file("Medium.txt", "input_files", solvers_7rules[1], restricted)
-    run_for_file("Large.txt", "input_files", solvers_rules[1], restricted)
-    """
+    print datetime.datetime.utcnow()
+#    run_for_file("Large.txt", "input_files", solvers_7rules[1], restricted)
+
 
     # run_for_frank()
     print "Done"
