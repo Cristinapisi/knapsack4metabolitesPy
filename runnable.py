@@ -4,22 +4,9 @@ __author__ = 'Cristina'
 Run this with python.
  - run_locally is used to search for solutions from console for a pair mass and tolerance
   for example, for Glucose, you would enter mass 180.06338811828 and tolerance 0 or 1 and expect C6H12O6
- - run_tests is used to search for solutions for a set of pairs of mass and tolerance, stored in a file, one pair per line, separated by a ','
+ - run__for_file is used to search for solutions for a set of pairs of mass and tolerance, stored in a file, one pair per line, separated by a ','
     for example, look at Small.txt
- - run_for_frank will work with the framework in which this will be integrated, called FRANK
-
-Parameters:
- - what function to use:
-        - exhaustive_search
-        - knapsack  (not yet, TO DO)
-        (presumably soon opting in or out of 7 golden rules)
-        (maybe other variations in the future)
- - in and out files where appropriate
- - a delta which is set below as the computation error allowed.
-    At the moment it is set at the lowest value that does not affect the correctness of results
-    This is not the tolerance value for measurement errors, as those vary among experiments.
-    This is to cope with the limitations of python for high precision floats equality.
-
+ - run_for_frank will work with the framework in which this will be integrated; might be called FRANK
 """
 
 import the_7rules
@@ -31,6 +18,7 @@ solvers_7rules = [exhaustive_search_7rules, DP_Bellman_7rules]
 
 # computation error allowed
 delta = 0.00000000001
+
 
 # You should not use recursion in python for a depth of 1000 or more
 # To run a recursive algorithm for masses > 999, uncomment the next line; strongly discourage bigger number
@@ -63,7 +51,7 @@ def run_locally():
         mass = float(input("Enter a mass: "))
         tolerance = float(input("Enter a tolerance (in ppm): ")) / 1000000
         if algorithm <= len(solvers_basic):
-            function = solvers_basic[algorithm-1]
+            function = solvers_basic[algorithm - 1]
         else:
             function = solvers_7rules[algorithm - len(solvers_basic) - 1]
         print
@@ -96,7 +84,7 @@ def run_locally():
             if len(formulas_filtered) == 0:
                 print "No results"
             t2 = datetime.datetime.utcnow()
-            print "Filter time: " + str(t2-t1)
+            print "Filter time: " + str(t2 - t1)
         print
 
         # ask if to terminate
@@ -126,7 +114,7 @@ def run_for_file(filein, location, solver, restrict):
             t1 = datetime.datetime.utcnow()
             formulas = solver.search(mass, tolerance, delta, restrict)
             t2 = datetime.datetime.utcnow()
-            write_file_formulas(file_handler, formulas,mass, tolerance, t2-t1)
+            write_file_formulas(file_handler, formulas, mass, tolerance, t2 - t1)
         file_handler.close()
     elif solver in solvers_basic:
         output_file = os.path.join(output_folder, prettyprint_solver(solver) + '.txt')
@@ -139,8 +127,8 @@ def run_for_file(filein, location, solver, restrict):
             t2 = datetime.datetime.utcnow()
             formulas_filtered = the_7rules.filter_all(formulas, restrict)
             t3 = datetime.datetime.utcnow()
-            write_file_formulas(file_handler, formulas, mass, tolerance, t2-t1)
-            write_file_formulas(file_handler_filtered, formulas_filtered, mass, tolerance, t3-t1)
+            write_file_formulas(file_handler, formulas, mass, tolerance, t2 - t1)
+            write_file_formulas(file_handler_filtered, formulas_filtered, mass, tolerance, t3 - t1)
         file_handler.close()
         file_handler_filtered.close()
     t_end = datetime.datetime.utcnow()
@@ -156,7 +144,6 @@ def run_for_frank():
 
 
 if __name__ == '__main__':
-
     time_start = datetime.datetime.utcnow()
 
     # run from console
@@ -202,7 +189,6 @@ if __name__ == '__main__':
     run_for_file("Small.txt", "input_files", solvers_7rules[1], restricted)
     run_for_file("Medium.txt", "input_files", solvers_7rules[1], restricted)
     """
-
 
     time_end = datetime.datetime.utcnow()
 
