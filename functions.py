@@ -3,7 +3,23 @@ __author__ = 'Cristina'
 import os
 import datetime
 import the_7rules
-from periodic_table import elements, CHNOPS
+from periodic_table import *
+
+
+def sorted_CHNOPS():
+    return [HYDROGEN, CARBON, NITROGEN, OXYGEN, PHOSPHORUS, SULFUR]
+
+
+def sorted_elements():
+    return [HYDROGEN, CARBON, NITROGEN, OXYGEN, FLUORINE, NATRIUM, PHOSPHORUS, SULFUR, CHLORINE, BROMINE, IODINE]
+
+
+def sorted_masses_with_blowup_CHNOPS(b):
+    return [int(round(e['freqisotope']['mass'] * b)) for e in sorted_CHNOPS()]
+
+
+def sorted_masses_with_blowup_elements(b):
+    return [int(round(e['freqisotope']['mass'] * b)) for e in sorted_elements()]
 
 
 def get_formula_string(formula):
