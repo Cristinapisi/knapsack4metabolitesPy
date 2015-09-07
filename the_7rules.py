@@ -1,7 +1,7 @@
 __author__ = 'Cristina'
 
 from periodic_table import *
-from functions import get_formula_mass, get_formula_string
+from functions import get_formula_mass
 
 
 def element_numbers_restriction(formula, c, h, n, o, p, s, f, cl, br, restrict):

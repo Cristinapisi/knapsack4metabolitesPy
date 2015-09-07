@@ -2,7 +2,6 @@ __author__ = 'Cristina'
 
 import os
 import datetime
-import the_7rules
 from periodic_table import *
 
 
