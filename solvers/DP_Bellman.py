@@ -6,7 +6,7 @@ from functions import get_formula_mass, get_formula_string
 
 # scale up al masses for better precision
 # but time trade-off
-scalar = 1
+scalar = 10
 
 
 def helper_search(prev_row, max_c, element_list, last_index, repetitions, empty_formula, terminate):

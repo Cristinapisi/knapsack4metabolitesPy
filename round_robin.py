@@ -6,7 +6,7 @@ from functions import sorted_masses_with_blowup_CHNOPS, sorted_masses_with_blowu
 # Scale for better precision
 # Set as a power of 10, between 10^1 and 10^6
 # Be wary of precision - time trade-off
-b = 1000
+b = 10000
 
 # Set infinity
 infinite = sys.maxint

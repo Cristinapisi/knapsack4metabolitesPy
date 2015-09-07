@@ -6,11 +6,19 @@ import random
 from periodic_table import *
 
 metabolites_CHNOPS = [
+    ("carbon dioxide", "C1 O2"),
     ("ethylene", "C2 H4"),
-    ("L-tryptophan", "C11 H12 N2 O2"),
+    ("glycerol", "C3 H8 O3"),
     ("L-Glutamate", "C5 H9 N1 O4"),
     ("aspartic acid", "C4 H7 N1 O4"),
-    ("glycerol", "C3 H8 O3"),
+    ("L-tryptophan", "C11 H12 N2 O2"),
+    ("sucrose", "C12 H22 O11"),
+    ("virodhamine", "C22 H37 N1 O2"),
+    ("nefopam", "C17 H19 N1 O1"),
+    ("sotalol", "C12 H20 N2 O3 S1"),
+    ("campesterol", "C28 H48 O1"),
+    ("folic acid", "C19 H19 N7 O6"),
+    ("doxycicline", "C22 H24 N2 O8"),
     ("riboflavin (vit B2)", "C17 H20 N4 O6"),
     ("caffeine", "C8 H10 N4 O2"),
     ("ceroplastic acid", "C35 H70 O2"),
@@ -29,6 +37,10 @@ metabolites_CHNOPS = [
     ("null", "C24 H42 O22"),
     ("null", "H4 C20 S7 N22 P10"),
     ("null", "H4 C20 S14 N40")
+]
+
+metabolites_non_CHNOPS = [
+    ("amiloride", "C6 H8 Cl N7O"),
 ]
 
 

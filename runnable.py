@@ -1,6 +1,3 @@
-import sys
-import the_7rules
-
 __author__ = 'Cristina'
 
 """
@@ -25,14 +22,12 @@ Parameters:
 
 """
 
-import os
-import datetime
-from solvers import exhaustive_search, exhaustive_search_7rules, DP_Bellman, DP_Bellman_7rules, knapsack, knapsack_7rules
-from functions import get_formula_string, read_file, get_output_folder, write_file_header, write_file_formulas, \
-    prettyprint_solver
+import the_7rules
+from solvers import exhaustive_search, exhaustive_search_7rules, DP_Bellman, DP_Bellman_7rules, knapsack
+from functions import *
 
 solvers_basic = [exhaustive_search, DP_Bellman, knapsack]
-solvers_7rules = [exhaustive_search_7rules, DP_Bellman_7rules, knapsack_7rules]
+solvers_7rules = [exhaustive_search_7rules, DP_Bellman_7rules]
 
 # computation error allowed
 delta = 0.00000000001
@@ -123,6 +118,7 @@ def run_locally():
 def run_for_file(filein, location, solver, restrict):
     data_in = read_file(os.path.join(location, filein))
     output_folder = get_output_folder(filein, "output_files", restrict)
+    t_start = datetime.datetime.utcnow()
     if solver in solvers_7rules:
         output_file = os.path.join(output_folder, prettyprint_solver(solver) + '.txt')
         file_handler = write_file_header(output_file, False)
@@ -147,6 +143,8 @@ def run_for_file(filein, location, solver, restrict):
             write_file_formulas(file_handler_filtered, formulas_filtered, mass, tolerance, t3-t1)
         file_handler.close()
         file_handler_filtered.close()
+    t_end = datetime.datetime.utcnow()
+    print prettyprint_solver(solver) + " processed " + filein + " in " + str(t_end - t_start)
 
 
 def run_for_frank():
@@ -159,12 +157,21 @@ def run_for_frank():
 
 if __name__ == '__main__':
 
+    time_start = datetime.datetime.utcnow()
+
     # run from console
     run_locally()
 
     # There are no molecules outside CHNOPS in the data sets
     # Might as well restrict the search to CHNOPS
     restricted = True
+
+    # run all on the Small dataset
+    """
+    solvers = solvers_basic + solvers_7rules
+    for solver in solvers:
+        run_for_file("Small.txt", "input_files", solver, restricted)
+    """
 
     # run for exhaustive search with and without post filtering
     """
@@ -196,11 +203,7 @@ if __name__ == '__main__':
     run_for_file("Medium.txt", "input_files", solvers_7rules[1], restricted)
     """
 
-    # run for knapsack with 7 rules pruning
-    """
-    run_for_file("Small.txt", "input_files", solvers_7rules[2], restricted)
-    run_for_file("Medium.txt", "input_files", solvers_7rules[2], restricted)
-    """
 
-    # run_for_frank()
-    print "Done"
+    time_end = datetime.datetime.utcnow()
+
+    print "All computations successul in " + str(time_end - time_start)

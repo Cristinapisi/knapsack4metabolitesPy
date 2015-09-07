@@ -68,7 +68,7 @@ def read_file(filein):
 def write_file_header(fileout, post_7rules):
     f = open(fileout, 'w')
     if post_7rules:
-        f.write("with post filtering using " + str(the_7rules) + '\n')
+        f.write("with post filtering \n")
     else:
         f.write("no post filtering \n")
     f.write("mass".center(15) + "tolerance(ppm)".center(10) + "formula".center(20) + "mass delta".center(
